@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+	<script type="text/javascript" src="js/fdb-all.min.js"></script>
 		<script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 		<link rel="shortcut icon" href="https://cdn-img.easyicon.net/png/5671/567161.gif" type="image/x-icon" />
@@ -12,60 +13,47 @@
 		<link rel="stylesheet" type="text/css" href="">
 		<script type="text/javascript" src="js/fdb-all.min.js"></script>
 		<meta charset="utf-8">
+		<title>hi</title>
 		<title>Car Database</title>
 	</head>
 	<body>
-	<div class="container">
-		<h1>Car Database</h1>
-			<form class="form-inline">
-	  <div class="form-group">
-	    <label for="carname">Car Name</label>
-	    <input type="text" class="form-control" id="carname">
-	  </div>
-	  <div class="form-group">
-	    <label for="carcolor">Car Color</label>
-	    <input type="text" class="form-control" id="carcolor">
-	  </div>
-	  <button id="add" type="submit" class="btn btn-primary">新增資料</button>
-	</form>
-		<table class="table table-hover">
+		姓名:<input type = "text" id ="newName">
+		年齡:<input type = "text" id = "newAge">
+		<button id = "addData">新增資料</button>
+		<table class="table">
 			<thead>
 				<tr>
-					<td>ID</td>
-					<td>車名</td>
-					<td>顏色</td>
+					<td>id</td>
+					<td>color</td>
+					<td>操作</td>
 				</tr>
 			</thead>
-			<tbody id = "carsTable">
-			<tr>
-				<td id="carid">
-				</td>
-				<td id="carname">
-				</td>
-				<td id="carcolor">
-				</td>
-			</tr>
+			<tbody id = "table1">
+				<tr>
+					<td>1</td>
+					<td>Orange</td>
+					<td><button class = "deleteButton btn btn-danger">刪除</button></td>
+				</tr>
 			</tbody>
 		</table>
-		<div id="carModal" class="modal fade">
-		  <div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title" id="modaltitle">Modal title</h5>
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		          <span aria-hidden="true">&times;</span>
-		        </button>
-		      </div>
-		      <div class="modal-body" id="modalbody">
-		        <p>Modal body text goes here.</p>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		      </div>
-		    </div>
-		  </div>
+		<div class="modal fade" tabindex="-1" role="dialog" id = "carsinformation">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id= "carsname">Modal title</h4>
+					</div>
+					<div class="modal-body">
+						<p>ID:<span id = "carsid"></span></p>
+						<p>年齡:<span id = "carsage"></span></p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
-		<script type="text/javascript" src="js/database.js"></script>
+		<script type="text/javascript" src="js/db.js"></script>
 	</body>
 </html>

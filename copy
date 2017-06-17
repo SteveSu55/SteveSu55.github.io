@@ -1,0 +1,70 @@
+var fdb = new ForerunnerDB();
+var db = fdb.db("mydb");
+
+var studentCollection = db.collection('students');
+
+// for (var i = 0; i <10 ; i++) {
+// 	var newStudent = {
+// 		name : "Blue" + i,
+// 		age  :10 + i
+// 	}
+// studentCollection.insert(newStudent)
+
+// }
+// studentCollection.save()
+
+studentCollection.load()
+
+function createHTMLString(_id, name) {
+    return "<tr><td>" + _id + "</td><td>" + name + "</td><td><button class = 'deleteButton btn btn-danger' data-id = '" + _id + "'>刪除</button></td></tr>";
+}
+
+function afterLoad() {
+    var students = studentCollection.find();
+    console.log(students)
+    for (var i = 0; i < students.length; i++) {
+        console.log(students[i]._id);
+        $("#table1").append(createHTMLString(students[i]._id, students[i].name));
+    }
+    $("#table1").on("click", ".studentsid", function() {
+        var studentsid = $(this).text();
+        console.log(studentsid)
+        var query = {
+            _id: studentsid
+        };
+        var student = studentCollection.find(query)[0];
+        $("#studentsname").text(student.name);
+        $("#studentsage").text(student.age);
+        $("#studentsid").text(student._id);
+
+        $("#studentsinformation").modal('show');
+    });
+}
+setTimeout(afterLoad, 1000);
+
+function addData() {
+    var name = $("#newName").val();
+    var age = $("#newAge").val();
+    var newStudent = {
+        name: name,
+        age: age
+    };
+    studentCollection.insert(newStudent);
+    studentCollection.save();
+    var student = studentCollection.find(newStudent)[0];
+    console.log(student);
+    $("#table1").append(createHTMLString(student._id, student.name));
+}
+$("#addData").click(addData);
+
+function deleteData() {
+    var id = $(this).attr("data-id")
+    console.log(id)
+    studentCollection.remove({
+        _id: id
+    });
+    studentCollection.save()
+    $(this).parents("tr").remove()
+
+}
+$("#table1").on("click", ".deleteButton", deleteData)

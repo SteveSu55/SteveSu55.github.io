@@ -1,49 +1,70 @@
 var fdb = new ForerunnerDB();
-var db = fdb.db("cars");
+var db = fdb.db("mydb");
+
 var carsCollection = db.collection('cars');
-carsCollection.save();
-carsCollection.load();
-$(document).ready(function(){
-	var cars = carsCollection.find();
-	console.log(cars);
-    for (var i = 0; i < cars.length; i++) {
-	    var carid = cars[i]._id;
-		var carname = cars[i].name;
-		var carcolor = cars[i].color;
-		$("#carid").append("<tr><button class='btn btn-link carsID' data-toggle='modal' data-target='#carModal'>" + carid + "</button></tr>");
-	    $("#carname").append("<tr>" + carname + "</tr>");
-	    $("#carcolor").append("<tr>" + carcolor + "</tr>");    
-	}
-    $(".carsID").click(function() {
-        var carsId = $(this).text();
-        console.log("carsId");
-        var query = {
-            _id: carsId
-        }
-        var cars = carsCollection.find(query)[0];
-        $("#carsName").text(cars.name);
-        $("#carsAge").text(cars.age);
-        $("#carsId").text(cars._id);
-        $("#carsInfo").modal('show');
-    });
-})
-function add() {
-    var carname = $("#carname").val();
-    var carcolor = $("#carcolor").val()
-    var newCars = {
-        name: carname,
-        color: carcolor
-    };
-    carsCollection.insert(newCars);
-    carsCollection.save();
-    var cars = carsCollection.find(newCars)[0]
-    var carid = cars._id;
-	var carname = cars.name;
-	var carcolor = cars.color;
-	console.log(carname);
-	console.log(carcolor);
-    $("#carid").append("<tr><button class='btn btn-link carsID' data-toggle='modal' data-target='#carModal'>" + carid + "</button><tr>");
-    $("#carname").append("<tr>" + carname + "</tr>");
-    $("#carcolor").append("<tr>" + carcolor + "</tr>");
+
+// for (var i = 0; i <10 ; i++) {
+//  var newCars = {
+//      name : "Blue" + i,
+//      age  :10 + i
+//  }
+// carsCollection.insert(newCars)
+
+// }
+// carsCollection.save()
+
+carsCollection.load()
+
+function createHTMLString(_id, name) {
+    return "<tr><td>" + _id + "</td><td>" + name + "</td><td><button class = 'deleteButton btn btn-danger' data-id = '" + _id + "'>刪除</button></td></tr>";
 }
-$("#add").click(add);
+
+function afterLoad() {
+    var cars = carsCollection.find();
+    console.log(cars)
+    for (var i = 0; i < cars.length; i++) {
+        console.log(cars[i]._id);
+        $("#table1").append(createHTMLString(cars[i]._id, cars[i].name));
+    }
+    $("#table1").on("click", ".carsid", function() {
+        var carsid = $(this).text();
+        console.log(carsid)
+        var query = {
+            _id: carsid
+        };
+        var cars = carsCollection.find(query)[0];
+        $("#carsname").text(cars.name);
+        $("#carsage").text(cars.age);
+        $("#carsid").text(cars._id);
+
+        $("#carsinformation").modal('show');
+    });
+}
+setTimeout(afterLoad, 1000);
+
+function addData() {
+    var name = $("#newName").val();
+    var age = $("#newAge").val();
+    var newCars = {
+        name: name,
+        age: age
+    };
+    carsCollection.insert(carsStudent);
+    carsCollection.save();
+    var cars = carsCollection.find(newCars)[0];
+    console.log(cars);
+    $("#table1").append(createHTMLString(cars._id, cars.name));
+}
+$("#addData").click(addData);
+
+function deleteData() {
+    var id = $(this).attr("data-id")
+    console.log(id)
+    carsCollection.remove({
+        _id: id
+    });
+    carsCollection.save()
+    $(this).parents("tr").remove()
+
+}
+$("#table1").on("click", ".deleteButton", deleteData)
